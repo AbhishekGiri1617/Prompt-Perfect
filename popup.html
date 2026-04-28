@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PromptPerfect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0d14;
+      --bg2: #13131e;
+      --bg3: #1a1a2a;
+      --border: rgba(255,255,255,0.08);
+      --gold: #c9a96e;
+      --gold-light: #e8d5b7;
+      --text: #e0d4c4;
+      --text-muted: #8a7f72;
+      --green: #4ade80;
+      --red: #f87171;
+    }
+
+    body {
+      width: 340px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px;
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    .header {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(201,169,110,0.06) 0%, transparent 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #1a1a2e, #2d1b69);
+      border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      color: var(--gold);
+    }
+
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--gold-light);
+      letter-spacing: 0.02em;
+    }
+
+    .logo-sub {
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-top: 1px;
+    }
+
+    /* Toggle */
+    .toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toggle-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    .toggle {
+      position: relative;
+      width: 36px;
+      height: 20px;
+    }
+
+    .toggle input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .toggle-slider::after {
+      content: '';
+      position: absolute;
+      left: 2px;
+      top: 2px;
+      width: 14px;
+      height: 14px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .toggle input:checked + .toggle-slider {
+      background: rgba(201,169,110,0.15);
+      border-color: rgba(201,169,110,0.4);
+    }
+
+    .toggle input:checked + .toggle-slider::after {
+      transform: translateX(16px);
+      background: var(--gold);
+    }
+
+    /* ── Body ── */
+    .body {
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Status bar */
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      border: 1px solid;
+    }
+
+    .status-bar.ok {
+      background: rgba(74,222,128,0.06);
+      border-color: rgba(74,222,128,0.2);
+      color: #86efac;
+    }
+
+    .status-bar.warn {
+      background: rgba(251,191,36,0.06);
+      border-color: rgba(251,191,36,0.2);
+      color: #fde68a;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .status-bar.ok .status-dot { background: var(--green); }
+    .status-bar.warn .status-dot { background: #fbbf24; animation: pp-pulse 1.5s infinite; }
+
+    @keyframes pp-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* Form groups */
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    input[type="password"],
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 9px 12px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+
+    input[type="password"]:focus,
+    input[type="text"]:focus,
+    select:focus {
+      border-color: rgba(201,169,110,0.4);
+      background: var(--bg3);
+    }
+
+    input[type="password"]::placeholder {
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a7f72' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      cursor: pointer;
+    }
+
+    select option {
+      background: #1a1a2e;
+      color: var(--text);
+    }
+
+    /* Key input row */
+    .key-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .key-row input { flex: 1; }
+
+    .btn-icon {
+      padding: 9px 10px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .btn-icon:hover {
+      border-color: rgba(201,169,110,0.3);
+      color: var(--gold);
+    }
+
+    /* Save button */
+    .btn-save {
+      width: 100%;
+      padding: 11px;
+      background: linear-gradient(135deg, #1a1a2e 0%, #2d1b69 100%);
+      border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 10px;
+      color: var(--gold-light);
+      font-family: 'Playfair Display', serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .btn-save:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(201,169,110,0.15);
+      border-color: rgba(201,169,110,0.5);
+    }
+
+    .btn-save:active { transform: translateY(0); }
+
+    .btn-save.saved {
+      background: linear-gradient(135deg, #0d2818 0%, #0a3d1f 100%);
+      border-color: rgba(74,222,128,0.4);
+      color: #86efac;
+    }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0 -20px;
+    }
+
+    /* Footer */
+    .footer {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-note {
+      font-size: 11px;
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
+    .footer-link {
+      font-size: 11px;
+      color: var(--gold);
+      text-decoration: none;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+
+    .footer-link:hover { opacity: 1; }
+
+    /* Hint text */
+    .hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .hint a { color: var(--gold); text-decoration: none; }
+    .hint a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">✦</div>
+      <div>
+        <div class="logo-text">Prompt Perfect</div>
+        <div class="logo-sub">AI Prompt Optimizer</div>
+      </div>
+    </div>
+    <div class="toggle-wrap">
+      <span class="toggle-label">Active</span>
+      <label class="toggle">
+        <input type="checkbox" id="enabledToggle" checked />
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="body">
+
+    <!-- Status -->
+    <div class="status-bar warn" id="statusBar">
+      <div class="status-dot"></div>
+      <span id="statusText">API key required to activate</span>
+    </div>
+
+    <!-- API Key -->
+    <div class="field">
+      <label>Groq API Key — Free ✦</label>
+      <div class="key-row">
+        <input type="password" id="apiKey" placeholder="gsk_…" autocomplete="off" />
+        <button class="btn-icon" id="toggleVisibility" title="Show/hide key">👁</button>
+      </div>
+      <span class="hint">
+        Free key at <a href="https://console.groq.com/keys" target="_blank">console.groq.com/keys</a>
+      </span>
+    </div>
+
+    <!-- Model Selector -->
+    <div class="field">
+      <label>Model</label>
+      <select id="model">
+        <option value="llama-3.3-70b-versatile">Llama 3.3 70B — Best Quality</option>
+        <option value="llama-3.1-8b-instant">Llama 3.1 8B — Fastest</option>
+        <option value="gemma2-9b-it">Gemma 2 9B — Balanced</option>
+        <option value="mixtral-8x7b-32768">Mixtral 8x7B — Long Prompts</option>
+      </select>
+    </div>
+
+    <!-- Tone Selector -->
+    <div class="field">
+      <label>Optimization Style</label>
+      <select id="tone">
+        <option value="clear">✦ Clear & Specific (default)</option>
+        <option value="technical">⚙ Technical & Precise</option>
+        <option value="simple">◎ Simple & Direct</option>
+        <option value="detailed">≡ Add Context & Detail</option>
+        <option value="creative">✿ Creative & Open-ended</option>
+      </select>
+    </div>
+
+    <!-- Save -->
+    <button class="btn-save" id="saveBtn">Save Settings</button>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span class="footer-note">Click ✦ Optimize on any text field</span>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
