@@ -2,6 +2,9 @@
 What is PromptPerfect?
 A Chrome extension that watches every text box on any webpage. When you type or paste a prompt, a small ✦ Optimize button appears. Click it — your rough prompt is sent to Groq's AI API, rewritten into a cleaner version, and placed back into the same text box automatically.
 
+<img width="1438" height="726" alt="{48DD22AA-EC2A-49FF-B864-1F788376E744}" src="https://github.com/user-attachments/assets/dc200430-a2e0-4c4d-b8d4-63f8c4a82257" />
+
+
 <img width="1546" height="702" alt="{E48A1FF7-432B-4185-9736-995F3C85023D}" src="https://github.com/user-attachments/assets/d2f0e27e-67ae-4dd4-bc1b-e8da6e8981ad" />
 Click on optimize button
 <img width="1539" height="681" alt="{CC30E678-4DA1-4457-A6B3-57CD5E7443CD}" src="https://github.com/user-attachments/assets/9db77aeb-a1bf-45bc-96c0-bed68db06ce0" />
